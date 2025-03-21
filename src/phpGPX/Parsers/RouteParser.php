@@ -8,6 +8,7 @@ namespace phpGPX\Parsers;
 
 use phpGPX\Models\Route;
 use phpGPX\phpGPX;
+use phpGPX\Helpers\GeoHelper;
 
 /**
  * Class RouteParser
@@ -94,6 +95,8 @@ abstract class RouteParser
 						break;
 				}
 			}
+
+			GeoHelper::setAlt($route, $routes);
 
 			if (phpGPX::$CALCULATE_STATS) {
 				$route->recalculateStats();

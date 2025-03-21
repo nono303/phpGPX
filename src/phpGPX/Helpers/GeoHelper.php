@@ -7,6 +7,9 @@
 namespace phpGPX\Helpers;
 
 use phpGPX\Models\Point;
+use phpGPX\phpGPX;
+use phpGPX\Models\Track;
+use phpGPX\Models\Route;
 
 /**
  * Class GeoHelper
@@ -54,5 +57,36 @@ abstract class GeoHelper
 		$elevDiff = abs($elevation1 - $elevation2);
 
 		return sqrt(pow($distance, 2) + pow($elevDiff, 2));
+	}
+	
+	public static function setAlt(&$trkrte, $trkrtes){
+		if(is_a($trkrte, "phpGPX\Models\Track")){
+			$display = "trk";
+			$check = $trkrte->segments[0];
+		} elseif(is_a($trkrte, "phpGPX\Models\Route")){
+			$display = "rte";
+			$check = $trkrte;
+		}
+		if(phpGPX::$ELEVATION_EXTERNAL && !$check->points[0]->elevation){
+			if(is_a($trkrte, "phpGPX\Models\Track")){
+				for($s = 0; $s < ($nbs = count($trkrte->segments)); $s++)
+					self::subSetAlt($trkrte->segments[$s],$display,$trkrtes,$s);
+			} elseif(is_a($trkrte, "phpGPX\Models\Route")){
+				self::subSetAlt($trkrte,$display,$trkrtes);
+			}
+		} elseif(phpGPX::$ELEVATION_EXTERNAL){
+			phpGPX::debug("ele present for ".$display."[".sizeof($trkrtes)."]");
+		} elseif(!$check->points[0]->elevation){
+			phpGPX::debug("ele missing for ".$display."[".sizeof($trkrtes)."]");
+		}
+	}
+	
+	private static function subSetAlt(&$segrte,$display,$trkrtes,$seg = null){
+		if(phpGPX::$DEBUG)
+			$bt = microtime(true);
+		$ret = \Elevation::getAltitudeFromArray(((array) $segrte->points),"latitude","longitude","dtm1");
+		for($p = 0; $p < ($nbp = count($segrte->points)); $p++)
+			$segrte->points[$p]->elevation = $ret[$p];	
+		phpGPX::debug("setting ".$nbp." ele for ".$display."[".sizeof($trkrtes)."]".(is_null($seg) ?: " seg[".$seg."]").(phpGPX::$DEBUG ? " in ".round((microtime(true)-$bt)*1000)."ms" : ""));
 	}
 }

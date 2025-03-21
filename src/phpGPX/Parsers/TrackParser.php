@@ -8,6 +8,7 @@ namespace phpGPX\Parsers;
 
 use phpGPX\Models\Track;
 use phpGPX\phpGPX;
+use phpGPX\Helpers\GeoHelper;
 
 /**
  * Class TrackParser
@@ -88,6 +89,8 @@ abstract class TrackParser
 						break;
 				}
 			}
+
+			GeoHelper::setAlt($track, $tracks);
 
 			if (phpGPX::$CALCULATE_STATS) {
 				$track->recalculateStats();
