@@ -18,7 +18,7 @@ use phpGPX\Models\Route;
  */
 abstract class GeoHelper
 {
-	const EARTH_RADIUS = 6371000;
+	const EARTH_RADIUS = 6378137;
 
 	/**
 	 * Returns distance in meters between two Points according to GPX coordinates.
