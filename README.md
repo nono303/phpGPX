@@ -1,3 +1,11 @@
+### Forked from https://github.com/Sibyx/phpGPX to enable setting elevation when missing in trk/seg and rte
+
+###  :warning: This is a draft and actually`$gpx::$ELEVATION_EXTERNAL = true;` will not work as it require component from https://github.com/nono303/phpgistoolbox/tree/main/src/Elevation
+
+---
+
+---
+
 # phpGPX
 
 [![Code Climate](https://codeclimate.com/github/Sibyx/phpGPX/badges/gpa.svg)](https://codeclimate.com/github/Sibyx/phpGPX)
