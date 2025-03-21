@@ -6,6 +6,8 @@
 
 namespace phpGPX;
 
+include_once "nono/Common.php";
+
 use phpGPX\Models\GpxFile;
 use phpGPX\Parsers\MetadataParser;
 use phpGPX\Parsers\RouteParser;
@@ -84,6 +86,11 @@ class phpGPX
 	 * @var int|null
 	 */
 	public static $ELEVATION_SMOOTHING_SPIKES_THRESHOLD = null;
+	
+	/**
+	 * if elevation not set, retreieve it from external function 
+	 */
+	public static $ELEVATION_EXTERNAL = false;
 
 	/**
 	 * Apply distance calculation smoothing? If true, the threshold in
@@ -98,6 +105,16 @@ class phpGPX
 	 * @var int
 	 */
 	public static $DISTANCE_SMOOTHING_THRESHOLD = 2;
+	
+	/**
+	 * stdout debug if true
+	 */
+	public static $DEBUG = false;
+	
+	public static function debug($message){
+		if(phpGPX::$DEBUG)
+			echo $message.PHP_EOL;
+	}
 
 	/**
 	 * Load GPX file.
@@ -106,9 +123,8 @@ class phpGPX
 	 */
 	public static function load($path)
 	{
-		$xml = file_get_contents($path);
 
-		return self::parse($xml);
+		return self::parse($path);
 	}
 
 	/**
@@ -118,9 +134,12 @@ class phpGPX
 	 */
 	public static function parse($xml)
 	{
-		$xml = simplexml_load_string($xml);
+		$xml = \Common::xml_load_file($xml, 'SimpleXMLElement', LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_NSCLEAN);
 
 		$gpx = new GpxFile();
+		
+		if(phpGPX::$ELEVATION_EXTERNAL)
+			include_once("gis/Elevation.php");
 
 		// Parse creator
 		$gpx->creator = isset($xml['creator']) ? (string)$xml['creator'] : null;
