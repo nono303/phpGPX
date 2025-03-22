@@ -75,18 +75,23 @@ abstract class GeoHelper
 				self::subSetAlt($trkrte,$display,$trkrtes);
 			}
 		} elseif(phpGPX::$ELEVATION_EXTERNAL){
-			phpGPX::debug("ele present for ".$display."[".sizeof($trkrtes)."]");
+			phpGPX::logstdout(phpGPX::LOG_DEBUG,"ele present for ".$display."[".sizeof($trkrtes)."]");
 		} elseif(!$check->points[0]->elevation){
-			phpGPX::debug("ele missing for ".$display."[".sizeof($trkrtes)."]");
+			phpGPX::logstdout(phpGPX::LOG_DEBUG,"ele missing for ".$display."[".sizeof($trkrtes)."]");
 		}
 	}
 	
 	private static function subSetAlt(&$segrte,$display,$trkrtes,$seg = null){
 		if(phpGPX::$DEBUG)
 			$bt = microtime(true);
-		$ret = \Elevation::getAltitudeFromArray(((array) $segrte->points),"latitude","longitude","dtm1");
+		try{
+			$ret = \Elevation::getAltitudeFromArray(((array) $segrte->points),"latitude","longitude","dtm1");
+		} catch(\Exception $e){
+			phpGPX::logstdout(phpGPX::LOG_ERROR,$e->getMessage());
+			return;
+		}
 		for($p = 0; $p < ($nbp = count($segrte->points)); $p++)
 			$segrte->points[$p]->elevation = $ret[$p];	
-		phpGPX::debug("setting ".$nbp." ele for ".$display."[".sizeof($trkrtes)."]".(is_null($seg) ?: " seg[".$seg."]").(phpGPX::$DEBUG ? " in ".round((microtime(true)-$bt)*1000)."ms" : ""));
+		phpGPX::logstdout(phpGPX::LOG_INFO,"setting ".$nbp." ele for ".$display."[".sizeof($trkrtes)."]".(is_null($seg) ?: " seg[".$seg."]").(phpGPX::$DEBUG ? " in ".round((microtime(true)-$bt)*1000)."ms" : ""));
 	}
 }

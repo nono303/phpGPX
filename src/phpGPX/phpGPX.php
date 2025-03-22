@@ -109,11 +109,24 @@ class phpGPX
 	/**
 	 * stdout debug if true
 	 */
-	public static $DEBUG = false;
-	
-	public static function debug($message){
-		if(phpGPX::$DEBUG)
-			echo $message.PHP_EOL;
+	public static $DEBUG = null;
+	 
+	const LOG_DEBUG	= 1;
+	const LOG_INFO	= 2;
+	const LOG_WARN	= 3;
+	const LOG_ERROR	= 4;
+	const LOG_FATAL	= 5;
+	const LOG_STRING = [
+		phpGPX::LOG_DEBUG	=> "DEBUG",
+		phpGPX::LOG_INFO	=> "INFO",
+		phpGPX::LOG_WARN	=> "WARN",
+		phpGPX::LOG_ERROR	=> "ERROR",
+		phpGPX::LOG_FATAL	=> "FATAL"
+	];
+
+	public static function logstdout($level,$message){
+		if(phpGPX::$DEBUG && $level >= phpGPX::$DEBUG)
+			echo phpGPX::LOG_STRING[$level]."\t".$message.PHP_EOL;
 	}
 
 	/**
@@ -124,7 +137,7 @@ class phpGPX
 	public static function load($path)
 	{
 
-		return self::parse($path);
+		return self::parse(file_get_contents(realpath($path)));
 	}
 
 	/**
@@ -134,7 +147,7 @@ class phpGPX
 	 */
 	public static function parse($xml)
 	{
-		$xml = \Common::xml_load_file($xml, 'SimpleXMLElement', LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_NSCLEAN);
+		$xml = \Common::xml_load_string($xml, 'SimpleXMLElement', LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_NSCLEAN);
 
 		$gpx = new GpxFile();
 		
