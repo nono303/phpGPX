@@ -24,7 +24,7 @@ class phpGPX
 	const XML_FORMAT = 'xml';
 
 	const PACKAGE_NAME = 'phpGPX';
-	const VERSION = '1.3.0';
+	const VERSION = '1.4.0';
 
 	/**
 	 * Create Stats object for each track, segment and route
@@ -124,6 +124,9 @@ class phpGPX
 		phpGPX::LOG_FATAL	=> "FATAL"
 	];
 
+	// LIBXML_NOBLANKS: better performance
+	const LIBXML_DEFAULT_FLAGS = LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_NSCLEAN | LIBXML_PARSEHUGE | LIBXML_NO_XXE | LIBXML_NOENT;
+
 	public static function logstdout($level,$message){
 		if(phpGPX::$DEBUG && $level >= phpGPX::$DEBUG)
 			echo phpGPX::LOG_STRING[$level]."\t".$message.PHP_EOL;
@@ -134,7 +137,7 @@ class phpGPX
 	 * @param $path
 	 * @return GpxFile
 	 */
-	public static function load($path)
+	public static function load($path,$flags = phpGPX::LIBXML_DEFAULT_FLAGS)
 	{
 
 		return self::parse(file_get_contents(realpath($path)));
@@ -145,9 +148,9 @@ class phpGPX
 	 * @param $xml
 	 * @return GpxFile
 	 */
-	public static function parse($xml)
+	public static function parse($xml,$flags = phpGPX::LIBXML_DEFAULT_FLAGS)
 	{
-		$xml = \Common::xml_load_string($xml, 'SimpleXMLElement', LIBXML_BIGLINES | LIBXML_COMPACT | LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_NSCLEAN);
+		$xml = \Common::xml_load_string($xml, 'SimpleXMLElement', $flags);
 
 		$gpx = new GpxFile();
 		
