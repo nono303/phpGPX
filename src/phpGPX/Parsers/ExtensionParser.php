@@ -19,6 +19,8 @@ abstract class ExtensionParser
 	public static $tagName = 'extensions';
 
 	public static $usedNamespaces = [];
+	
+	const EXCLUDED_NAMESPACE = ["http://www.topografix.com/GPX/1/1"];
 
 	/**
 	 * @param \SimpleXMLElement $nodes
@@ -28,21 +30,20 @@ abstract class ExtensionParser
 	{
 		$extensions = new Extensions();
 
-		$nodeNamespaces = $nodes->getNamespaces(true);
+		$nodeNamespaces = array_diff($nodes->getNamespaces(true), self::EXCLUDED_NAMESPACE);
 
 		foreach ($nodeNamespaces as $key => $namespace) {
+			$node = $nodes->children($namespace);
 			switch ($namespace) {
 				case TrackPointExtension::EXTENSION_NAMESPACE:
+					$extensions->trackPointExtension = TrackPointExtensionParser::parse($node);
+					break;
 				case TrackPointExtension::EXTENSION_V1_NAMESPACE:
-					$node = $nodes->children($namespace)->{TrackPointExtension::EXTENSION_NAME};
-					if (!empty($node)) {
-						$extensions->trackPointExtension = TrackPointExtensionParser::parse($node);
-					}
+					$extensions->trackPointExtension = TrackPointExtensionParser::parse($node);
 					break;
 				default:
-					foreach ($nodes->children($namespace) as $child_key => $value) {
+					foreach ($nodes->children($namespace) as $child_key => $value) 
 						$extensions->unsupported[$key ? "$key:$child_key" : "$child_key"] = (string) $value;
-					}
 			}
 		}
 
