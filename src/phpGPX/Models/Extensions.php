@@ -34,9 +34,11 @@ class Extensions implements Summarizable
 	 */
 	public function toArray()
 	{
-		return [
-				'trackpoint' => SerializationHelper::serialize($this->trackPointExtension),
-				'unsupported' => $this->unsupported,
-			];
+		$ret = [];
+		if($this->trackPointExtension)
+			$ret['trackpoint'] = SerializationHelper::serialize($this->trackPointExtension);
+		if($this->unsupported)
+			$ret['unsupported'] = $this->unsupported;
+		return $ret;
 	}
 }

@@ -111,15 +111,10 @@ class TrackPointExtension extends AbstractExtension
 	 */
 	public function toArray()
 	{
-		return [
-			'aTemp' => SerializationHelper::floatOrNull($this->aTemp),
-			'wTemp' => SerializationHelper::floatOrNull($this->wTemp),
-			'depth' => SerializationHelper::floatOrNull($this->depth),
-			'hr' => SerializationHelper::floatOrNull($this->hr),
-			'cad' => SerializationHelper::floatOrNull($this->cad),
-			'speed' => SerializationHelper::floatOrNull($this->speed),
-			'course' => SerializationHelper::integerOrNull($this->course),
-			'bearing' => SerializationHelper::integerOrNull($this->bearing)
-		];
+		$ret = [];
+		foreach(['aTemp', 'wTemp', 'depth', 'hr', 'cad', 'speed', 'course', 'bearing'] as $k)
+			if($this->$k)
+				$ret[$k] = SerializationHelper::floatOrNull($this->$k);
+		return $ret;
 	}
 }
