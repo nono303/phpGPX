@@ -85,7 +85,7 @@ abstract class GeoHelper
 		if(phpGPX::$DEBUG)
 			$bt = microtime(true);
 		try{
-			$ret = \Elevation::getAltitudeFromArray(((array) $segrte->points),"latitude","longitude","dtm1");
+			$ret = \Elevation::getAltitudeFromArray(((array) $segrte->points),"latitude","longitude");
 		} catch(\Exception $e){
 			phpGPX::logstdout(phpGPX::LOG_ERROR,$e->getMessage());
 			return;
