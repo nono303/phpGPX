@@ -61,7 +61,7 @@ abstract class RouteParser
 	 * @param \SimpleXMLElement[] $nodes
 	 * @return Route[]
 	 */
-	public static function parse($nodes)
+	public static function parse(\SimpleXMLElement $nodes,$gpx)
 	{
 		$routes = [];
 
@@ -96,7 +96,7 @@ abstract class RouteParser
 				}
 			}
 
-			GeoHelper::setAlt($route, $routes);
+			GeoHelper::setAlt($route, $routes,$gpx);
 
 			if (phpGPX::$CALCULATE_STATS) {
 				$route->recalculateStats();

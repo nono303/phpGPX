@@ -61,7 +61,7 @@ abstract class TrackParser
 	 * @param \SimpleXMLElement $nodes
 	 * @return Track[]
 	 */
-	public static function parse(\SimpleXMLElement $nodes)
+	public static function parse(\SimpleXMLElement $nodes,$gpx)
 	{
 		$tracks = [];
 
@@ -90,7 +90,7 @@ abstract class TrackParser
 				}
 			}
 
-			GeoHelper::setAlt($track, $tracks);
+			GeoHelper::setAlt($track, $tracks,$gpx);
 
 			if (phpGPX::$CALCULATE_STATS) {
 				$track->recalculateStats();

@@ -10,6 +10,7 @@ use phpGPX\Models\Point;
 use phpGPX\phpGPX;
 use phpGPX\Models\Track;
 use phpGPX\Models\Route;
+use phpGPX\Models\Metadata;
 
 /**
  * Class GeoHelper
@@ -59,7 +60,7 @@ abstract class GeoHelper
 		return sqrt(pow($distance, 2) + pow($elevDiff, 2));
 	}
 	
-	public static function setAlt(&$trkrte, $trkrtes){
+	public static function setAlt(&$trkrte, $trkrtes, $gpx){
 		if(is_a($trkrte, "phpGPX\Models\Track")){
 			$display = "trk";
 			$check = $trkrte->segments[0];
@@ -74,6 +75,16 @@ abstract class GeoHelper
 			} elseif(is_a($trkrte, "phpGPX\Models\Route")){
 				self::subSetAlt($trkrte,$display,$trkrtes);
 			}
+			$metadataName = "keywords"; // least worst...
+			$metadataValue = "Altitude set from DTM1";
+			if(!$gpx->metadata){
+				$gpx->metadata = new Metadata();
+				$gpx->metadata->$metadataName = $metadataValue;
+			} elseif(!$gpx->metadata->$metadataName){
+				$gpx->metadata->$metadataName = $metadataValue;
+			} else {
+				$gpx->metadata->$metadataName .= ". ".$metadataValue;
+			}				
 		} elseif(phpGPX::$ELEVATION_EXTERNAL){
 			phpGPX::logstdout(phpGPX::LOG_DEBUG,"ele present for ".$display."[".sizeof($trkrtes)."]");
 		} elseif(!$check->points[0]->elevation){

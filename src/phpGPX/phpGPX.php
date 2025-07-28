@@ -167,10 +167,10 @@ class phpGPX
 		$gpx->waypoints = isset($xml->wpt) ? WaypointParser::parse($xml->wpt) : [];
 
 		// Parse tracks
-		$gpx->tracks = isset($xml->trk) ? TrackParser::parse($xml->trk) : [];
+		$gpx->tracks = isset($xml->trk) ? TrackParser::parse($xml->trk,$gpx) : [];
 
 		// Parse routes
-		$gpx->routes = isset($xml->rte) ? RouteParser::parse($xml->rte) : [];
+		$gpx->routes = isset($xml->rte) ? RouteParser::parse($xml->rte,$gpx) : [];
 
 		return $gpx;
 	}
