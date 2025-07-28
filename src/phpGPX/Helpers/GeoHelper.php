@@ -92,6 +92,6 @@ abstract class GeoHelper
 		}
 		for($p = 0; $p < ($nbp = count($segrte->points)); $p++)
 			$segrte->points[$p]->elevation = $ret[$p];	
-		phpGPX::logstdout(phpGPX::LOG_INFO,"setting ".$nbp." ele for ".$display."[".sizeof($trkrtes)."]".(is_null($seg) ?: " seg[".$seg."]").(phpGPX::$DEBUG ? " in ".round((microtime(true)-$bt)*1000)."ms" : ""));
+		phpGPX::logstdout(phpGPX::LOG_DEBUG,"setting ".$nbp." ele for ".$display."[".sizeof($trkrtes)."]".(is_null($seg) ?: " seg[".$seg."]").(phpGPX::$DEBUG ? " in ".round((microtime(true)-$bt)*1000)."ms" : ""));
 	}
 }
