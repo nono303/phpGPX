@@ -106,6 +106,9 @@ abstract class PointParser
 
 		$point->latitude = isset($node['lat']) ? ((float) $node['lat']) : null;
 		$point->longitude = isset($node['lon']) ? ((float) $node['lon']) : null;
+		
+		if(!$point->latitude && !$point->longitude)
+			return null;
 
 		foreach (self::$attributeMapper as $key => $attribute) {
 			switch ($key) {

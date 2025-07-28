@@ -36,7 +36,8 @@ abstract class SegmentParser
 				$segment->points = [];
 
 				foreach ($node->trkpt as $point) {
-					$segment->points[] = PointParser::parse($point);
+					if($ptok = PointParser::parse($point))
+						$segment->points[] = $ptok;
 				}
 			}
 			$segment->extensions = isset($node->extensions) ? ExtensionParser::parse($node->extensions) : null;
