@@ -86,9 +86,9 @@ class phpGPX
 	 * @var int|null
 	 */
 	public static $ELEVATION_SMOOTHING_SPIKES_THRESHOLD = null;
-	
+
 	/**
-	 * if elevation not set, retreieve it from external function 
+	 * if elevation not set, retreieve it from external function
 	 */
 	public static $ELEVATION_EXTERNAL = false;
 
@@ -105,12 +105,12 @@ class phpGPX
 	 * @var int
 	 */
 	public static $DISTANCE_SMOOTHING_THRESHOLD = 2;
-	
+
 	/**
 	 * stdout debug if true
 	 */
 	public static $DEBUG = null;
-	 
+
 	const LOG_DEBUG	= 1;
 	const LOG_INFO	= 2;
 	const LOG_WARN	= 3;
@@ -150,10 +150,14 @@ class phpGPX
 	 */
 	public static function parse($xml,$flags = phpGPX::LIBXML_DEFAULT_FLAGS)
 	{
-		$xml = \Common::xml_load_string($xml, 'SimpleXMLElement', $flags);
+		if(gettype($xml) == "string"){
+			$xml = \Common::xml_load_string($xml, 'SimpleXMLElement', $flags);
+		} elseif(get_class($xml) != "SimpleXMLElement"){
+			Throw new \Exception("Unknow type of xml: ".get_class($xml));
+		}
 
 		$gpx = new GpxFile();
-		
+
 		if(phpGPX::$ELEVATION_EXTERNAL)
 			include_once("gis/Elevation.php");
 
