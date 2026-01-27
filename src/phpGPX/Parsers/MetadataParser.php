@@ -115,7 +115,7 @@ abstract class MetadataParser
 						$child = LinkParser::toXMLArray($metadata->links, $document);
 						break;
 					case 'time':
-						$child = $document->createElement('time', DateTimeHelper::formatDateTime($metadata->time));
+						$child = $document->createElement('time', is_a($metadata->time, 'DateTime') ? DateTimeHelper::formatDateTime($metadata->time) : $metadata->time);
 						break;
 					case 'bounds':
 						$child = BoundsParser::toXML($metadata->bounds, $document);
