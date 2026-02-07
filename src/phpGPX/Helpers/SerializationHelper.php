@@ -23,7 +23,7 @@ abstract class SerializationHelper
 	 */
 	public static function integerOrNull($value)
 	{
-		return is_numeric($value) ? (integer) $value : null;
+		return is_numeric($value) ? (int) $value : null;
 	}
 
 	/**
@@ -56,13 +56,13 @@ abstract class SerializationHelper
 		if (is_array($object)) {
 			$result = [];
 			foreach ($object as $record) {
-				$result[] = $record->toArray();
+				$result[] = $record;
 				$record = null;
 			}
 			$object = null;
 			return $result;
 		} else {
-			return $object != null ? $object->toArray() : null;
+			return $object != null ? $object : null;
 		}
 	}
 
@@ -72,7 +72,7 @@ abstract class SerializationHelper
 			if (!is_array($item)) {
 				continue;
 			}
-			
+
 			$item = self::filterNotNull($item);
 		}
 
