@@ -59,7 +59,7 @@ abstract class GeoHelper
 
 		return sqrt(pow($distance, 2) + pow($elevDiff, 2));
 	}
-	
+
 	public static function setAlt(&$trkrte, $trkrtes, $gpx){
 		if(is_a($trkrte, "phpGPX\Models\Track")){
 			$display = "trk";
@@ -75,23 +75,17 @@ abstract class GeoHelper
 			} elseif(is_a($trkrte, "phpGPX\Models\Route")){
 				self::subSetAlt($trkrte,$display,$trkrtes);
 			}
-			$metadataName = "keywords"; // least worst...
-			$metadataValue = "Altitude set from DTM1";
-			if(!$gpx->metadata){
+			// trace "Altitude set from DTM1" in metadata keywords
+			if(!$gpx->metadata)
 				$gpx->metadata = new Metadata();
-				$gpx->metadata->$metadataName = $metadataValue;
-			} elseif(!$gpx->metadata->$metadataName){
-				$gpx->metadata->$metadataName = $metadataValue;
-			} else {
-				$gpx->metadata->$metadataName .= ". ".$metadataValue;
-			}				
+			$gpx->metadata->keywords[] = "Altitude set from DTM1";
 		} elseif(phpGPX::$ELEVATION_EXTERNAL){
 			phpGPX::logstdout(phpGPX::LOG_DEBUG,"ele present for ".$display."[".sizeof($trkrtes)."]");
 		} elseif(!$check->points[0]->elevation){
 			phpGPX::logstdout(phpGPX::LOG_DEBUG,"ele missing for ".$display."[".sizeof($trkrtes)."]");
 		}
 	}
-	
+
 	private static function subSetAlt(&$segrte,$display,$trkrtes,$seg = null){
 		if(phpGPX::$DEBUG)
 			$bt = microtime(true);
@@ -102,7 +96,7 @@ abstract class GeoHelper
 			return;
 		}
 		for($p = 0; $p < ($nbp = count($segrte->points)); $p++)
-			$segrte->points[$p]->elevation = $ret[$p];	
+			$segrte->points[$p]->elevation = $ret[$p];
 		phpGPX::logstdout(phpGPX::LOG_DEBUG,"setting ".$nbp." ele for ".$display."[".sizeof($trkrtes)."]".(is_null($seg) ?: " seg[".$seg."]").(phpGPX::$DEBUG ? " in ".round((microtime(true)-$bt)*1000)."ms" : ""));
 	}
 }

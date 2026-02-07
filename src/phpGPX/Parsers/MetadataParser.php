@@ -66,8 +66,20 @@ abstract class MetadataParser
 
 		foreach (self::$attributeMapper as $key => $attribute) {
 			switch ($key) {
+				case 'keywords':
+					preg_match("/src::([^ ,]+)/",($kw = (string) $node->keywords),$matches);
+					if($matches[1]){
+						$metadata->src = $matches[1];
+						$kw = str_replace("src::".$metadata->src,"",$kw);
+					}
+					if(sizeof($kws = array_values(array_filter(preg_split('/(,) ?/', $kw, -1 )))) > 0)
+						$metadata->keywords = $kws;
+					break;
 				case 'author':
-					$metadata->author = isset($node->author) ? PersonParser::parse($node->author) : null;
+					if($node->author->name && is_countable($node->author->name))
+						foreach($node->author->name as $name)
+							$metadata->author[] = (string) $name;
+					// $metadata->author = isset($node->author) ? PersonParser::parse($node->author) : null;
 					break;
 				case 'copyright':
 					$metadata->copyright = isset($node->copyright) ? CopyrightParser::parse($node->copyright) : null;
