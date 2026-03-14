@@ -68,6 +68,7 @@ class Track extends Collection
 			'link' => SerializationHelper::serialize($this->links),
 			'number' => SerializationHelper::integerOrNull($this->number),
 			'type' => SerializationHelper::stringOrNull($this->type),
+			'sym' => SerializationHelper::stringOrNull($this->type),
 			'extensions' => SerializationHelper::serialize($this->extensions),
 			'trkseg' => SerializationHelper::serialize($this->segments),
 			'stats' => SerializationHelper::serialize($this->stats)

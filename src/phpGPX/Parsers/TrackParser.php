@@ -47,6 +47,10 @@ abstract class TrackParser
 			'name' => 'type',
 			'type' => 'string'
 		],
+		'sym' => [
+			'name' => 'sym',
+			'type' => 'string'
+		],
 		'extensions' => [
 			'name' => 'extensions',
 			'type' => 'object'

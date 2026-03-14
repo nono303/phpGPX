@@ -63,6 +63,13 @@ abstract class Collection implements Summarizable, StatsCalculator
 	public $type;
 
 	/**
+	 * Symbol (classification) of GPS symbol name.
+	 * An original GPX 1.1 attribute.
+	 * @var string|null
+	 */
+	public $sym;
+
+	/**
 	 * You can add extend GPX by adding your own elements from another schema here.
 	 * An original GPX 1.1 attribute.
 	 * @var Extensions|null
