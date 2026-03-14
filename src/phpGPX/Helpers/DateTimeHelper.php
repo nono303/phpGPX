@@ -34,7 +34,7 @@ class DateTimeHelper
 	 * @param string $timezone
 	 * @return null|string
 	 */
-	public static function formatDateTime($datetime, $format = 'c', $timezone = 'UTC')
+	public static function formatDateTime($datetime, $format = 'Y-m-d\TH:i:sp', $timezone = 'UTC')
 	{
 		$formatted 				= null;
 
@@ -51,11 +51,10 @@ class DateTimeHelper
 	 * @param string $timezone
 	 * @return \DateTime
 	 */
-	public static function parseDateTime($value, $timezone = 'Europe/London')
+	public static function parseDateTime($value, $timezone = 'UTC')
 	{
 		$timezone = new \DateTimeZone($timezone);
 		$datetime = new \DateTime($value, $timezone);
-		$datetime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
 		return $datetime;
 	}
