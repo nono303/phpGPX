@@ -245,7 +245,7 @@ class Point implements Summarizable
 			'lat' => (float) $this->latitude,
 			'lon' => (float) $this->longitude,
 			'ele' => SerializationHelper::floatOrNull($this->elevation),
-			'time' => DateTimeHelper::formatDateTime($this->time, phpGPX::$DATETIME_FORMAT, phpGPX::$DATETIME_TIMEZONE_OUTPUT),
+			'time' => DateTimeHelper::formatDateTime($this->time),
 			'magvar' => SerializationHelper::floatOrNull($this->magVar),
 			'geoidheight' => SerializationHelper::floatOrNull($this->geoidHeight),
 			'name' => SerializationHelper::stringOrNull($this->name),

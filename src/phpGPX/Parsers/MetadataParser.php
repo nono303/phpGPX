@@ -8,6 +8,7 @@ namespace phpGPX\Parsers;
 
 use phpGPX\Helpers\DateTimeHelper;
 use phpGPX\Models\Metadata;
+use phpGPX\Models\Person;
 
 /**
  * Class MetadataParser
@@ -67,12 +68,7 @@ abstract class MetadataParser
 		foreach (self::$attributeMapper as $key => $attribute) {
 			switch ($key) {
 				case 'keywords':
-					preg_match("/src::([^ ,]+)/",($kw = (string) $node->keywords),$matches);
-					if($matches[1]){
-						$metadata->src = $matches[1];
-						$kw = str_replace("src::".$metadata->src,"",$kw);
-					}
-					if(sizeof($kws = array_values(array_filter(preg_split('/(,) ?/', $kw, -1 )))) > 0)
+					if(sizeof($kws = array_values(array_filter(preg_split('/(,) ?/', (string) $node->keywords, -1 )))) > 0)
 						$metadata->keywords = $kws;
 					break;
 				case 'author':
@@ -118,6 +114,14 @@ abstract class MetadataParser
 			if (!is_null($metadata->{$attribute['name']})) {
 				switch ($key) {
 					case 'author':
+						if(is_array($metadata->author)){
+							$child = $document->createElement($key);
+							foreach($metadata->author as $aname){
+								($name = $document->createElement("name"))->appendChild($document->createTextNode((string) $aname));
+								$child->appendChild($name);
+							}
+							break;
+						}
 						$child = PersonParser::toXML($metadata->author, $document);
 						break;
 					case 'copyright':

@@ -7,6 +7,7 @@
 namespace phpGPX\Helpers;
 
 use phpGPX\Models\Point;
+use phpGPX\phpGPX;
 
 /**
  * Class DateTimeHelper
@@ -31,31 +32,25 @@ class DateTimeHelper
 	/**
 	 * @param $datetime
 	 * @param string $format
-	 * @param string $timezone
 	 * @return null|string
 	 */
-	public static function formatDateTime($datetime, $format = 'Y-m-d\TH:i:sp', $timezone = 'UTC')
+	public static function formatDateTime($datetime)
 	{
-		$formatted 				= null;
-
 		if ($datetime instanceof \DateTime) {
-			$datetime->setTimezone(new \DateTimeZone($timezone));
-			$formatted 			= $datetime->format($format);
+			return $datetime->format(phpGPX::$DATETIME_FORMAT);
+		} elseif (is_string($datetime)) {
+			return ($dt = new \DateTime($datetime))->format(phpGPX::$DATETIME_FORMAT);
+		} else {
+			throw new \Exception("Unknown datetime format");
 		}
-
-		return $formatted;
 	}
 
 	/**
 	 * @param $value
-	 * @param string $timezone
 	 * @return \DateTime
 	 */
-	public static function parseDateTime($value, $timezone = 'UTC')
+	public static function parseDateTime($value)
 	{
-		$timezone = new \DateTimeZone($timezone);
-		$datetime = new \DateTime($value, $timezone);
-
-		return $datetime;
+		return new \DateTime($value);
 	}
 }

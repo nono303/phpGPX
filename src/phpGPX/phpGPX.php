@@ -43,14 +43,7 @@ class phpGPX
 	 * Default DateTime output format in JSON serialization.
 	 * @var string
 	 */
-	public static $DATETIME_FORMAT = 'c';
-
-	/**
-	 * Default timezone for display.
-	 * Data are always stored in UTC timezone.
-	 * @var string
-	 */
-	public static $DATETIME_TIMEZONE_OUTPUT = 'UTC';
+	public static $DATETIME_FORMAT = 'Y-m-d\TH:i:sp';
 
 	/**
 	 * Pretty print.

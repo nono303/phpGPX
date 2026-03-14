@@ -153,9 +153,9 @@ class Stats implements Summarizable
 			'maxAltitudeCoords' => $this->maxAltitudeCoords,
 			'cumulativeElevationGain' => (float)$this->cumulativeElevationGain,
 			'cumulativeElevationLoss' => (float)$this->cumulativeElevationLoss,
-			'startedAt' => DateTimeHelper::formatDateTime($this->startedAt, phpGPX::$DATETIME_FORMAT, phpGPX::$DATETIME_TIMEZONE_OUTPUT),
+			'startedAt' => DateTimeHelper::formatDateTime($this->startedAt),
 			'startedAtCoords' => $this->startedAtCoords,
-			'finishedAt' => DateTimeHelper::formatDateTime($this->finishedAt, phpGPX::$DATETIME_FORMAT, phpGPX::$DATETIME_TIMEZONE_OUTPUT),
+			'finishedAt' => DateTimeHelper::formatDateTime($this->finishedAt),
 			'finishedAtCoords' => $this->finishedAtCoords,
 			'duration' => (float)$this->duration,
 			'bounds' => $this->bounds

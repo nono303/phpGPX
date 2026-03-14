@@ -65,12 +65,6 @@ class Metadata implements Summarizable
 	public $keywords;
 
 	/**
-	 * src is a specific keyword begin with src::
-	 * @var string|null
-	 */
-	public $src;
-
-	/**
 	 * Minimum and maximum coordinates which describe the extent of the coordinates in the file.
 	 * Original GPX 1.1 attribute.
 	 * @var Bounds|null
@@ -113,7 +107,6 @@ class Metadata implements Summarizable
 			'copyright' => SerializationHelper::serialize($this->copyright),
 			'links' => SerializationHelper::serialize($this->links),
 			'time' => DateTimeHelper::formatDateTime($this->time),
-			'src' => SerializationHelper::stringOrNull($this->src),
 			'keywords' => SerializationHelper::serialize($this->keywords),
 			'bounds' => SerializationHelper::serialize($this->bounds),
 			'extensions' => SerializationHelper::serialize($this->extensions)
