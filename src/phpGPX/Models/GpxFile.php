@@ -108,7 +108,27 @@ class GpxFile implements Summarizable
 		$gpx->setAttribute("version", "1.1");
 		$gpx->setAttribute("creator", $this->creator ? $this->creator : phpGPX::getSignature());
 
-		ExtensionParser::$usedNamespaces = [];
+		ExtensionParser::$usedNamespaces = [
+				["prefix" => "wptx1",	"namespace" => "http://www.garmin.com/xmlschemas/WaypointExtension/v1",						"xsd" => "https://www8.garmin.com/xmlschemas/WaypointExtensionv1.xsd"],
+				["prefix" => "gpxtrx",	"namespace" => "http://www.garmin.com/xmlschemas/GpxExtensions/v3",							"xsd" => "http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd"],
+				["prefix" => "gpxx",	"namespace" => "http://www.garmin.com/xmlschemas/GpxExtensions/v3",							"xsd" => "http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd"],
+				["prefix" => "gpxtpx",	"namespace" => "http://www.garmin.com/xmlschemas/TrackPointExtension/v2",					"xsd" => "https://www8.garmin.com/xmlschemas/TrackPointExtensionv2.xsd"],
+				["prefix" => "trp",		"namespace" => "http://www.garmin.com/xmlschemas/TripExtensions/v2",						"xsd" => "https://www8.garmin.com/xmlschemas/TripExtensionsv2.xsd"],
+				["prefix" => "adv",		"namespace" => "http://www.garmin.com/xmlschemas/AdventuresExtensions/v1",					"xsd" => "http://www8.garmin.com/xmlschemas/AdventuresExtensionv1.xsd"],
+				["prefix" => "prs",		"namespace" => "http://www.garmin.com/xmlschemas/PressureExtension/v1",						"xsd" => "http://www.garmin.com/xmlschemas/PressureExtensionv1.xsd"],
+				["prefix" => "tmd",		"namespace" => "http://www.garmin.com/xmlschemas/TripMetaDataExtensions/v1",				"xsd" => "http://www.garmin.com/xmlschemas/TripMetaDataExtensionsv1.xsd"],
+				["prefix" => "vptm",	"namespace" => "http://www.garmin.com/xmlschemas/ViaPointTransportationModeExtensions/v1",	"xsd" => "http://www.garmin.com/xmlschemas/ViaPointTransportationModeExtensionsv1.xsd"],
+				["prefix" => "ctx",		"namespace" => "http://www.garmin.com/xmlschemas/CreationTimeExtension/v1",					"xsd" => "http://www.garmin.com/xmlschemas/CreationTimeExtensionsv1.xsd"],
+				["prefix" => "gpxacc",	"namespace" => "http://www.garmin.com/xmlschemas/AccelerationExtension/v1",					"xsd" => "http://www.garmin.com/xmlschemas/AccelerationExtensionv1.xsd"],
+				["prefix" => "vidx1",	"namespace" => "http://www.garmin.com/xmlschemas/VideoExtension/v1",						"xsd" => "http://www.garmin.com/xmlschemas/VideoExtensionv1.xsd"],
+				["prefix" => "gpxpx",	"namespace" => "http://www.garmin.com/xmlschemas/PowerExtension/v1",						"xsd" => "https://www8.garmin.com/xmlschemas/PowerExtensionv1.xsd"],
+				["prefix" => "gpxtrkx",	"namespace" => "http://www.garmin.com/xmlschemas/TrackStatsExtension/v1",					"xsd" => "https://www8.garmin.com/xmlschemas/TrackStatsExtension.xsd"],
+				["prefix" => "ns3",		"namespace" => "http://www.garmin.com/xmlschemas/ActivityExtension/v2",						"xsd" => "http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd"],
+				["prefix" => "twonav",	"namespace" => "http://twonav.com/twonav"],
+				["prefix" => "locus",	"namespace" => "http://www.locusmap.eu"],
+				["prefix" => "ogr",		"namespace" => "http://osgeo.org/gdal"],
+				["prefix" => "opencpn",	"namespace" => "http://www.opencpn.org"],
+			];
 
 		if (!empty($this->metadata)) {
 			$gpx->appendChild(MetadataParser::toXML($this->metadata, $document));
@@ -142,9 +162,10 @@ class GpxFile implements Summarizable
 				sprintf("xmlns:%s", $usedNamespace['prefix']),
 				$usedNamespace['namespace']
 			);
-
-			$schemaLocationArray[] = $usedNamespace['namespace'];
-			$schemaLocationArray[] = $usedNamespace['xsd'];
+			if($usedNamespace['xsd']) {
+				$schemaLocationArray[] = $usedNamespace['namespace'];
+				$schemaLocationArray[] = $usedNamespace['xsd'];
+			}
 		}
 
 		$gpx->setAttributeNS(
