@@ -36,7 +36,9 @@ class DateTimeHelper
 	 */
 	public static function formatDateTime($datetime)
 	{
-		if ($datetime instanceof \DateTime) {
+		if(is_null($datetime)) {
+			return null;
+		} elseif ($datetime instanceof \DateTime) {
 			return $datetime->format(phpGPX::$DATETIME_FORMAT);
 		} elseif (is_string($datetime)) {
 			return ($dt = new \DateTime($datetime))->format(phpGPX::$DATETIME_FORMAT);
